@@ -1,590 +1,213 @@
-<!DOCTYPE html>
-<html lang="bn">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>টাকা আয় করুন - বিজ্ঞাপন দেখুন</title>
-
-    <!-- Font Awesome (optional) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <style>
-        :root{
-            --primary-color:#4a6bff;
-            --secondary-color:#ff7d4a;
-            --success-color:#28a745;
-            --danger-color:#dc3545;
-            --warning-color:#ffc107;
-            --dark-color:#1a1a2e;
-            --light-color:#f8f9fa;
-            --card-bg:#16213e;
-            --text-color:#e6e6e6;
-            --text-muted:#adb5bd;
-        }
-        *{box-sizing:border-box;margin:0;padding:0}
-        body{
-            font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-            background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
-            color:var(--text-color);
-            min-height:100vh;
-            display:flex;
-            flex-direction:column;
-            padding:15px 15px 90px;
-        }
-        .container{
-            max-width:500px;
-            width:100%;
-            margin:0 auto;
-            background:rgba(22,33,62,0.95);
-            border-radius:15px;
-            box-shadow:0 10px 30px rgba(0,0,0,0.5);
-            overflow:hidden;
-            padding-bottom:20px;
-            backdrop-filter:blur(8px);
-        }
-        .header{
-            background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));
-            padding:18px;
-            text-align:center;
-            color:#fff;
-            border-bottom:5px solid rgba(255,255,255,0.06);
-        }
-        .header h1{font-size:22px;margin-bottom:6px}
-        .badge{display:inline-block;background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600}
-        .user-card,.stat-card,.progress-container,.referral-section,.rate-info,.withdraw-section,.ad-status{
-            background:var(--card-bg);
-            margin:14px;
-            padding:14px;
-            border-radius:10px;
-            box-shadow:0 4px 12px rgba(0,0,0,0.12);
-        }
-        .user-card{display:flex;align-items:center}
-        .user-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(45deg,var(--primary-color),var(--secondary-color));font-weight:700;font-size:20px;color:#fff;margin-right:12px}
-        .stats-container{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 14px 12px}
-        .stat-card{text-align:center}
-        .stat-card h3{font-size:12px;color:var(--text-muted);margin-bottom:8px}
-        .stat-card p{font-size:20px;font-weight:700;color:var(--primary-color)}
-        .progress-header{display:flex;justify-content:space-between;margin-bottom:10px}
-        .progress-bar{height:10px;background:rgba(255,255,255,0.07);border-radius:6px;overflow:hidden}
-        .progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));transition:width .45s ease}
-        .progress-text{display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-top:8px}
-        .action-buttons{display:grid;gap:10px;padding:0 14px 12px}
-        .btn{padding:12px;border:none;border-radius:10px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-        .btn-primary{background:linear-gradient(90deg,var(--primary-color),#6a11cb);color:#fff}
-        .btn-success{background:linear-gradient(90deg,var(--success-color),#11998e);color:#fff}
-        .btn-danger{background:linear-gradient(90deg,var(--danger-color),#ff416c);color:#fff}
-        .btn-secondary{background:linear-gradient(90deg,#2c3e50,#4ca1af);color:var(--text-color)}
-        .btn:disabled{opacity:.6;cursor:not-allowed}
-        .section-title{display:flex;align-items:center;gap:10px;font-size:16px;margin:0 14px 12px;color:#fff}
-        .referral-stats{display:flex;justify-content:space-between;background:rgba(0,0,0,0.12);padding:10px;border-radius:8px;margin-bottom:10px}
-        .referral-link-container{display:flex;gap:0;margin-top:10px}
-        #referral-link,#referral-link-earn{flex:1;padding:10px;border-radius:8px 0 0 8px;background:rgba(0,0,0,0.12);border:1px solid rgba(255,255,255,0.04);color:var(--text-color)}
-        #copy-referral{padding:0 14px;border-radius:0 8px 8px 0;background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));border:none;color:#fff;font-weight:700}
-        .withdraw-section{display:none}
-        .form-group{margin-bottom:12px}
-        .form-control{width:100%;padding:10px;border-radius:8px;background:rgba(0,0,0,0.12);border:1px solid rgba(255,255,255,0.04);color:var(--text-color);outline:none}
-        .form-control:focus{box-shadow:0 0 0 3px rgba(74,107,255,0.12)}
-        #withdraw-status{margin-top:10px;padding:10px;border-radius:8px;text-align:center}
-        .success-message{background:rgba(40,167,69,0.12);color:var(--success-color)}
-        .error-message{background:rgba(220,53,69,0.08);color:var(--danger-color)}
-        .info-message{background:rgba(74,107,255,0.08);color:var(--primary-color)}
-        .footer{text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted);padding-bottom:8px}
-        .notification{position:fixed;top:18px;right:18px;padding:12px;border-radius:8px;background:var(--card-bg);box-shadow:0 6px 18px rgba(0,0,0,0.25);z-index:2000;transform:translateX(200%);transition:transform .45s}
-        .notification.show{transform:translateX(0)}
-        .notification.success{border-left:4px solid var(--success-color)}
-        .notification.error{border-left:4px solid var(--danger-color)}
-        .bottom-nav{position:fixed;left:0;right:0;bottom:0;background:var(--card-bg);display:flex;justify-content:space-around;padding:10px 6px;box-shadow:0 -4px 12px rgba(0,0,0,0.3);z-index:1200}
-        .nav-item{display:flex;flex-direction:column;align-items:center;color:var(--text-muted);text-decoration:none;font-size:12px;padding:6px;border-radius:8px;width:25%}
-        .nav-item.active{color:var(--primary-color);background:rgba(74,107,255,0.06)}
-        .nav-item i{font-size:18px;margin-bottom:4px}
-        .ad-container{margin:12px;border-radius:10px;min-height:80px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.08);overflow:hidden}
-        @media(max-width:420px){.header h1{font-size:18px}.stats-container{grid-template-columns:1fr}.btn{padding:10px;font-size:14px}.nav-item span{font-size:11px}}
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MiniBDT — Cloud Ad Player</title>
+  <style>
+    :root{--bg:#0b1220;--card:#0f1724;--accent:#ff5fa2;--muted:#9aa7b8;--glass:rgba(255,255,255,0.03)}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Poppins', sans-serif;background:linear-gradient(180deg,#071026 0%,#0f1724 100%);color:#fff}
+    .wrap{max-width:400px;margin:24px auto;padding:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.02)}
+    h1{margin:6px 0 10px;color:var(--accent);font-size:20px;text-align:center}
+    p.lead{color:var(--muted);text-align:center;margin:0 0 14px}
+    .ad-area{width:100%;aspect-ratio:9/16;border-radius:12px;background:linear-gradient(180deg,#0f1a2b,#071026);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:12px;text-align:center}
+    .ad-placeholder{width:90%;aspect-ratio:9/16;border-radius:10px;background:linear-gradient(90deg,#101827,#122033);display:flex;align-items:center;justify-content:center;color:#c4d9e6;font-size:16px}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+    button.btn{padding:10px 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer}
+    .btn-primary{background:var(--accent);color:#081219}
+    .btn-muted{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+    .timer{margin-top:8px;font-weight:700;color:var(--accent)}
+    .status{margin-top:6px;color:#cbd5e1}
+    footer{margin-top:16px;text-align:center;color:#93a3b6;font-size:13px}
+    .meta{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:10px}
+    .chip{background:rgba(255,255,255,0.02);padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.02);font-size:13px;color:var(--muted)}
+    @media(max-width:520px){
+      .wrap{padding:12px;}
+      .ad-area{width:100%;}
+      .ad-placeholder{width:95%;}
+    }
+  </style>
 </head>
 <body>
-    <div class="container" role="main">
-        <div class="header" role="banner">
-            <h1>টাকা আয় করুন - বিজ্ঞাপন দেখুন</h1>
-            <p style="opacity:.95;font-size:13px;margin-top:6px">বিজ্ঞাপন দেখে আসল টাকা আয় করুন</p>
-            <div style="margin-top:8px"><span class="badge" aria-hidden="true">সক্রিয়</span></div>
+  <div class="wrap">
+    <div class="card">
+      <h1>MiniBDT — Cloud Ad Player</h1>
+      <p class="lead">Watch rewarded ads to earn. Ads are powered by Monetag. Do not skip — rewards are given only after full view.</p>
+
+      <div class="meta">
+        <div class="chip">Ad Duration: <strong>18s</strong></div>
+        <div class="chip">Reward: <strong>1000 BTTC</strong></div>
+        <div class="chip">Daily Limit: <strong>15 ads</strong></div>
+      </div>
+
+      <div class="ad-area" id="adArea">
+        <div class="ad-placeholder" id="adPlaceholder">Ad will appear here (Monetag)</div>
+        <div class="timer" id="timer">Time left: 18s</div>
+        <div class="status" id="status">Not started</div>
+
+        <div class="controls">
+          <button id="startBtn" class="btn btn-primary">▶ Start Ad</button>
+          <button id="closeBtn" class="btn btn-muted" disabled>⛔ Close</button>
         </div>
+      </div>
 
-        <!-- Advert top -->
-        <div class="ad-container" id="ad-top">
-            <!-- Keep ad script if you trust it. Recommendation: load ads async and review CSP. -->
-            <center>
-                <script type="text/javascript">
-                    // Example ad invocation left intentionally as original. Keep under review.
-                    // atOptions defined by publisher script may be required. Ensure it is trusted.
-                </script>
-            </center>
-        </div>
+      <div style="margin-top:12px;font-size:13px;color:#9fb1c9;text-align:center">
+        Note: If an ad fails to load, no reward will be issued. Refreshing the page will not reset progress. All texts are in English.
+      </div>
 
-        <!-- Home -->
-        <section id="home-page" class="page-section active" aria-labelledby="home-title">
-            <div class="user-card" aria-hidden="false">
-                <div class="user-avatar" id="user-avatar">U</div>
-                <div class="user-info">
-                    <h3 id="user-name">ব্যবহারকারী</h3>
-                    <p style="font-size:13px">আইডি: <span id="user-id">12345</span></p>
-                </div>
-            </div>
-
-            <div class="stats-container" aria-hidden="false">
-                <div class="stat-card" aria-label="দেখা বিজ্ঞাপন">
-                    <h3>দেখা বিজ্ঞাপন</h3>
-                    <p id="watched-ads">0</p>
-                </div>
-                <div class="stat-card" aria-label="আয়কৃত টাকা">
-                    <h3>আয়কৃত টাকা</h3>
-                    <p id="earned-money">0.00 <small style="font-size:12px">টাকা</small></p>
-                </div>
-            </div>
-
-            <div class="progress-container" aria-hidden="false">
-                <div class="progress-header">
-                    <h3 class="section-title" style="margin:0"><i class="fas fa-tasks"></i> আজকের অগ্রগতি</h3>
-                    <span id="ads-progress" style="font-size:14px;color:var(--text-muted)">0/20 টাকা</span>
-                </div>
-                <div class="progress-bar" aria-hidden="false">
-                    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
-                </div>
-                <div class="progress-text">
-                    <span id="progress-left">0 টাকা</span>
-                    <span id="progress-right">20 টাকা</span>
-                </div>
-            </div>
-
-            <div class="ad-status" id="ad-status" aria-live="polite"><i class="fas fa-check-circle"></i> বিজ্ঞাপন দেখতে প্রস্তুত</div>
-
-            <div class="action-buttons">
-                <button class="btn btn-primary" id="watch-ad-btn" onclick="watchAd()" aria-label="বিজ্ঞাপন দেখুন">
-                    <i class="fas fa-play" aria-hidden="true"></i> বিজ্ঞাপন দেখুন (২ টাকা)
-                </button>
-                <div style="display:flex;gap:8px">
-                    <button class="btn btn-success" id="auto-ad-btn" onclick="startAutoAds()" aria-label="স্বয়ংক্রিয় বিজ্ঞাপন চালু করুন">
-                        <i class="fas fa-robot" aria-hidden="true"></i> স্বয়ংক্রিয়
-                    </button>
-                    <button class="btn btn-danger" id="stop-auto-btn" onclick="stopAutoAds()" disabled aria-label="স্বয়ংক্রিয় বন্ধ করুন">
-                        <i class="fas fa-stop" aria-hidden="true"></i> বন্ধ করুন
-                    </button>
-                </div>
-                <button class="btn btn-secondary" onclick="showWithdrawForm()" aria-label="টাকা উত্তোলন">
-                    <i class="fas fa-wallet" aria-hidden="true"></i> টাকা উত্তোলন
-                </button>
-            </div>
-
-            <!-- Middle ad -->
-            <div class="ad-container" id="ad-mid"></div>
-
-            <div class="referral-section" aria-labelledby="ref-title">
-                <h3 id="ref-title" class="section-title"><i class="fas fa-users"></i> বন্ধুকে আমন্ত্রণ করুন</h3>
-                <div class="referral-stats">
-                    <div>আমন্ত্রিত: <strong id="referral-count">0</strong></div>
-                    <div>আয়: <strong id="referral-earnings">0.00</strong> টাকা</div>
-                </div>
-                <p style="font-size:13px">আপনার রেফারেল লিঙ্ক শেয়ার করুন এবং প্রতিটি বন্ধুর জন্য ৫ টাকা বোনাস পান!</p>
-                <div class="referral-link-container" style="margin-bottom:8px">
-                    <input id="referral-link" class="form-control" readonly aria-label="রেফারেল লিঙ্ক" />
-                    <button id="copy-referral" class="btn" onclick="copyReferralLink()">কপি</button>
-                </div>
-            </div>
-
-            <div class="rate-info" style="margin:12px">
-                <p><i class="fas fa-ad"></i> প্রতি বিজ্ঞাপন = ২ টাকা</p>
-                <p><i class="fas fa-money-bill-wave"></i> ন্যূনতম উত্তোলন: ২০ টাকা</p>
-                <p><i class="fas fa-gift"></i> রেফারেল বোনাস: ৫ টাকা প্রতি ব্যবহারকারী</p>
-            </div>
-        </section>
-
-        <!-- Withdraw page -->
-        <section id="withdraw-page" class="page-section" style="display:none">
-            <h3 class="section-title"><i class="fas fa-wallet"></i> টাকা উত্তোলন</h3>
-            <div class="stat-card">
-                <h3>মোট আয়</h3>
-                <p id="total-earned-withdraw">0.00 <small>টাকা</small></p>
-            </div>
-
-            <div class="withdraw-section" id="withdraw-section">
-                <div class="form-group">
-                    <label for="withdraw-amount">পরিমাণ (টাকা)</label>
-                    <input type="number" id="withdraw-amount" class="form-control" placeholder="টাকার পরিমাণ লিখুন" min="20" />
-                </div>
-                <div class="form-group">
-                    <label for="payment-method">পেমেন্ট মাধ্যম</label>
-                    <select id="payment-method" class="form-control">
-                        <option value="" disabled selected>পেমেন্ট মাধ্যম নির্বাচন করুন</option>
-                        <option value="bkash">bKash</option>
-                        <option value="nagad">Nagad</option>
-                        <option value="rocket">Rocket</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="withdraw-phone">মোবাইল নম্বর</label>
-                    <input type="tel" id="withdraw-phone" class="form-control" placeholder="01XXXXXXXXX" pattern="01[3-9][0-9]{8}" />
-                </div>
-                <button class="btn btn-primary" id="submit-withdraw" onclick="withdrawPoints()">অনুরোধ পাঠান</button>
-                <div id="withdraw-status"></div>
-            </div>
-
-            <div class="rate-info" style="margin:12px">
-                <p><i class="fas fa-money-bill-wave"></i> ন্যূনতম উত্তোলন: ২০ টাকা</p>
-                <p><i class="fas fa-clock"></i> উত্তোলন প্রসেসিং সময়: ২৪-৪৮ ঘন্টা</p>
-            </div>
-        </section>
-
-        <div class="footer">© ২০২৩ টাকা আয় করুন অ্যাপ। সকল অধিকার সংরক্ষিত।</div>
+      <div style="margin-top:8px;font-size:14px;color:#ff5fa2;text-align:center">
+        Balance: <span id="balance">0</span> BTTC | Ads Watched Today: <span id="adsCount">0</span>
+      </div>
     </div>
 
-    <div class="bottom-nav" role="navigation" aria-label="মূল নেভিগেশন">
-        <a href="#" class="nav-item active" onclick="showPage('home-page', this)"><i class="fas fa-home"></i><span>হোম</span></a>
-        <a href="#" class="nav-item" onclick="showPage('home-page', this)"><i class="fas fa-coins"></i><span>আর্ন</span></a>
-        <a href="#" class="nav-item" onclick="showPage('withdraw-page', this)"><i class="fas fa-wallet"></i><span>উত্তোলন</span></a>
-        <a href="#" class="nav-item" onclick="showPage('home-page', this)"><i class="fas fa-bell"></i><span>নোটিশ</span></a>
-    </div>
+    <footer>© MiniBDT | Developed by Shakil Hassan</footer>
+  </div>
 
-    <div id="notification" class="notification" role="status" aria-live="polite"><i class="fas fa-check-circle"></i><span id="notification-text" style="margin-left:10px"></span></div>
+  <!-- Monetag SDK -->
+  <script src="//libtl.com/sdk.js" data-zone="10030713" data-sdk="show_10030713"></script>
 
-    <script>
-    // ==== CONFIG (no sensitive secrets here) ====
-    const POINTS_PER_AD = 2.00;
-    const MIN_WITHDRAW_TAKA = 20;
-    const REFERRAL_BONUS = 5.00;
+  <script>
+    // Telegram Bot Token
+    const TELEGRAM_BOT_TOKEN = "8463666017:AAEMZW9bxeSKXbynHd9GArXUxCZnZcJxYpQ";
 
-    // Do NOT store bot tokens / admin chat ids client-side.
-    // Implement a server endpoint (example: POST /api/withdraw) that accepts withdrawal requests,
-    // validates them server-side and sends messages to Telegram. This client will call that API.
+    const AD_DURATION = 18;
+    const DAILY_LIMIT = 15;
+    const REWARD_AMOUNT = 1000;
+    const SDK_GLOBAL = 'show_10030713';
 
-    // ==== STATE ====
-    let watchedAdsCount = 0;
-    let earnedPoints = 0.00;
-    let referralCount = 0;
-    let referralEarnings = 0.00;
-    let userId = generateUserId();
-    let autoIntervalId = null;
-    let isAdLoading = false;
+    const startBtn = document.getElementById('startBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    const timerEl = document.getElementById('timer');
+    const statusEl = document.getElementById('status');
+    const adPlaceholder = document.getElementById('adPlaceholder');
+    const balanceEl = document.getElementById('balance');
+    const adsCountEl = document.getElementById('adsCount');
 
-    // ==== INIT ====
-    window.addEventListener('load', initApp);
+    let timer = AD_DURATION;
+    let interval = null;
+    let adPlaying = false;
 
-    function initApp(){
-        // referral detection
-        checkReferral();
+    let userBalance = parseInt(localStorage.getItem('userBalance') || '0');
+    let adsWatchedToday = parseInt(localStorage.getItem('adsWatchedToday') || '0');
 
-        document.getElementById('user-id').textContent = userId;
-        document.getElementById('user-avatar').textContent = userId.charAt(0).toUpperCase();
+    function updateUI() {
+      balanceEl.textContent = userBalance;
+      adsCountEl.textContent = adsWatchedToday;
+      timerEl.textContent = `Time left: ${timer}s`;
+    }
+    updateUI();
 
-        loadUserData();
+    const LS_KEY = 'minibdt_ads_progress_v2';
+    const state = loadState();
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(LS_KEY);
+        if(!raw) return {date: todayStr(), inProgress:false, startTs:null};
+        const s = JSON.parse(raw);
+        if(s.date !== todayStr()){ return {date: todayStr(), inProgress:false, startTs:null}; }
+        return s;
+      }catch(e){return {date: todayStr(), inProgress:false, startTs:null};}
+    }
+
+    function saveState(s){ localStorage.setItem(LS_KEY, JSON.stringify(s)); }
+    function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+
+    async function showMonetagAd(){
+      const fn = window[SDK_GLOBAL];
+      if(!fn){
+        adPlaceholder.textContent = '⚠️ Monetag SDK not loaded. Check zone ID.';
+        statusEl.textContent = 'Ad failed to load.';
+        startBtn.disabled = false;
+        return false;
+      }
+      try{
+        statusEl.textContent = 'Requesting ad from Monetag...';
+        await fn({type: 'rewarded'});
+        return true;
+      }catch(err){
+        adPlaceholder.textContent = '⚠️ Ad failed to load.';
+        statusEl.textContent = 'Ad failed to load.';
+        startBtn.disabled = false;
+        return false;
+      }
+    }
+
+    function canWatch(){ return adsWatchedToday < DAILY_LIMIT; }
+
+    startBtn.addEventListener('click', async ()=>{
+      if(!canWatch()){ alert('Daily limit reached (15 ads). Come back tomorrow.'); return; }
+      startBtn.disabled = true;
+      startBtn.style.opacity = 0.7;
+      state.inProgress = true;
+      state.startTs = Date.now();
+      saveState(state);
+
+      const ok = await showMonetagAd();
+      if(!ok){ state.inProgress=false; state.startTs=null; saveState(state); startBtn.disabled=false; return; }
+
+      startTimer(AD_DURATION);
+    });
+
+    function startTimer(seconds){
+      timer = seconds;
+      adPlaying = true;
+      closeBtn.disabled = true;
+      closeBtn.style.opacity = 0.5;
+      updateUI();
+
+      interval = setInterval(()=>{
+        timer--;
         updateUI();
-        checkAdReady();
-        generateReferralLink();
+        if(timer <= 0){ clearInterval(interval); completeAd(); }
+      },1000);
     }
 
-    function showPage(pageId, element){
-        document.querySelectorAll('.page-section').forEach(p=>{
-            p.style.display = 'none';
-        });
-        const page = document.getElementById(pageId);
-        if(page) page.style.display = 'block';
+    function completeAd(){
+      adPlaying = false;
+      state.inProgress = false;
+      state.startTs = null;
+      saveState(state);
 
-        // nav active
-        document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
-        if(element) element.classList.add('active');
+      // Update balance and ads count
+      userBalance += REWARD_AMOUNT;
+      adsWatchedToday += 1;
+      localStorage.setItem('userBalance', userBalance);
+      localStorage.setItem('adsWatchedToday', adsWatchedToday);
 
-        if(pageId === 'withdraw-page'){
-            document.getElementById('total-earned-withdraw').textContent = (earnedPoints + referralEarnings).toFixed(2) + ' টাকা';
-            // show withdraw section UI status if not enough
-            showWithdrawForm();
-        }
-    }
+      updateUI();
 
-    function generateUserId(){
-        const existing = localStorage.getItem('userId');
-        if(existing) return existing;
-        const newId = String(Math.floor(100000 + Math.random() * 900000));
-        localStorage.setItem('userId', newId);
-        return newId;
-    }
+      adPlaceholder.textContent = `✅ Ad Completed! Reward: ${REWARD_AMOUNT} BTTC`;
+      statusEl.textContent = `Ad finished — total balance: ${userBalance} BTTC, Ads watched today: ${adsWatchedToday}`;
 
-    function checkReferral(){
-        try{
-            const urlParams = new URLSearchParams(window.location.search);
-            const ref = urlParams.get('ref');
-            if(ref && ref !== userId && !localStorage.getItem('referredBy')){
-                localStorage.setItem('referredBy', ref);
-                // In a real system, notify your backend of this referral
-                showNotification('আপনি একটি রেফারেল লিঙ্ক ব্যবহার করে যোগদান করেছেন! রেফারার ৫ টাকা বোনাস পাবেন।','success');
-                console.log(`Referral: ${ref} should be credited on backend`);
-            }
-        }catch(e){console.warn('Referral check failed', e)}
-    }
+      closeBtn.disabled = false;
+      closeBtn.style.opacity = 1;
+      closeBtn.textContent = '✔ Close';
 
-    function generateReferralLink(){
-        const current = window.location.origin + window.location.pathname;
-        const link = `${current}?ref=${userId}`;
-        const el = document.getElementById('referral-link');
-        if(el) el.value = link;
-    }
-
-    async function copyReferralLink(){
-        const link = document.getElementById('referral-link')?.value || '';
-        if(!link) return;
-        try{
-            await navigator.clipboard.writeText(link);
-            const btn = document.getElementById('copy-referral');
-            const old = btn.textContent;
-            btn.textContent = 'কপি হয়েছে!';
-            showNotification('রেফারেল লিঙ্ক কপি করা হয়েছে!', 'success');
-            setTimeout(()=> btn.textContent = old, 1600);
-        }catch(err){
-            console.warn('Clipboard write failed', err);
-            // fallback
-            const input = document.getElementById('referral-link');
-            input.select();
-            document.execCommand && document.execCommand('copy');
-            showNotification('লিঙ্ক কপি হয়েছে (fallback)।', 'info');
-        }
-    }
-
-    // === localStorage ===
-    function loadUserData(){
-        watchedAdsCount = parseInt(localStorage.getItem('watchedAdsCount') || '0', 10);
-        earnedPoints = parseFloat(localStorage.getItem('earnedPoints') || '0');
-        referralCount = parseInt(localStorage.getItem('referralCount') || '0', 10);
-        referralEarnings = parseFloat(localStorage.getItem('referralEarnings') || '0');
-    }
-    function saveUserData(){
-        localStorage.setItem('watchedAdsCount', String(watchedAdsCount));
-        localStorage.setItem('earnedPoints', earnedPoints.toFixed(2));
-        localStorage.setItem('referralCount', String(referralCount));
-        localStorage.setItem('referralEarnings', referralEarnings.toFixed(2));
-    }
-
-    function updateUI(){
-        document.getElementById('watched-ads').textContent = watchedAdsCount;
-        document.getElementById('earned-money').textContent = (earnedPoints + referralEarnings).toFixed(2);
-        document.getElementById('referral-count').textContent = referralCount;
-        document.getElementById('referral-earnings').textContent = referralEarnings.toFixed(2);
-        updateProgress();
-    }
-
-    function updateProgress(){
-        const total = earnedPoints + referralEarnings;
-        const percent = Math.min((total / MIN_WITHDRAW_TAKA) * 100, 100);
-        document.getElementById('progress-fill').style.width = percent + '%';
-        document.getElementById('ads-progress').textContent = `${total.toFixed(2)}/${MIN_WITHDRAW_TAKA} টাকা`;
-        document.getElementById('progress-left').textContent = total.toFixed(2) + ' টাকা';
-        document.getElementById('progress-right').textContent = MIN_WITHDRAW_TAKA + ' টাকা';
-    }
-
-    // === Ad readiness check (stub for third-party SDK) ===
-    function checkAdReady(){
-        // If your ad SDK provides a ready function, use that. Here keep conservative check.
-        if(typeof window.show_9472189 !== 'function'){
-            document.getElementById('ad-status').innerHTML = '<i class="fas fa-spinner fa-spin"></i> বিজ্ঞাপন সিস্টেম লোড হচ্ছে...';
-            // try again later
-            setTimeout(checkAdReady, 1200);
-        }else{
-            document.getElementById('ad-status').innerHTML = '<i class="fas fa-check-circle"></i> বিজ্ঞাপন দেখতে প্রস্তুত';
-        }
-    }
-
-    // === Watch ad ===
-    function watchAd(){
-        if(isAdLoading) return;
-        if(typeof window.show_9472189 !== 'function'){
-            document.getElementById('ad-status').innerHTML = '<i class="fas fa-exclamation-circle"></i> বিজ্ঞাপন সিস্টেম প্রস্তুত নয়।';
-            return;
-        }
-
-        isAdLoading = true;
-        toggleWatchButtons(true);
-        document.getElementById('ad-status').innerHTML = '<i class="fas fa-spinner fa-spin"></i> বিজ্ঞাপন লোড হচ্ছে...';
-
-        // show_9472189 is promised in original; if not present, simulate for demo.
-        Promise.resolve()
-            .then(() => {
-                if(typeof window.show_9472189 === 'function') {
-                    return window.show_9472189();
-                } else {
-                    // Simulate 3s ad when SDK not present
-                    return new Promise(res => setTimeout(res, 3000));
-                }
-            })
-            .then(()=> {
-                watchedAdsCount++;
-                earnedPoints += POINTS_PER_AD;
-                saveUserData();
-                updateUI();
-                document.getElementById('ad-status').innerHTML = '<i class="fas fa-check-circle"></i> বিজ্ঞাপন সফলভাবে দেখা হয়েছে!';
-                createCoinAnimation();
-                showNotification(`২ টাকা যোগ হয়েছে! ব্যালেন্স: ${(earnedPoints + referralEarnings).toFixed(2)} টাকা`, 'success');
-
-                // auto mode continues using interval logic handled separately
-            })
-            .catch(err => {
-                console.error('Ad error', err);
-                document.getElementById('ad-status').innerHTML = '<i class="fas fa-times-circle"></i> বিজ্ঞাপন দেখানো যায়নি।';
-                showNotification('বিজ্ঞাপন লোডিংয়ে সমস্যা হয়েছে।', 'error');
-            })
-            .finally(()=>{
-                isAdLoading = false;
-                toggleWatchButtons(false);
-            });
-    }
-
-    function toggleWatchButtons(disabled){
-        document.getElementById('watch-ad-btn').disabled = disabled;
-    }
-
-    function createCoinAnimation(){
-        const btn = document.getElementById('watch-ad-btn');
-        if(!btn) return;
-        const rect = btn.getBoundingClientRect();
-        const coin = document.createElement('div');
-        coin.style.position = 'fixed';
-        coin.style.left = (rect.left + rect.width/2) + 'px';
-        coin.style.top = (rect.top + rect.height/2) + 'px';
-        coin.style.fontSize = '22px';
-        coin.style.zIndex = 9999;
-        coin.style.transition = 'transform 900ms ease-out, opacity 900ms ease-out';
-        coin.innerHTML = '<i class="fas fa-coins" style="color:gold"></i>';
-        document.body.appendChild(coin);
-        requestAnimationFrame(()=> {
-            coin.style.transform = 'translateY(-100px) rotate(360deg)';
-            coin.style.opacity = '0';
-        });
-        setTimeout(()=> coin.remove(), 1000);
-    }
-
-    // === Auto ads: start/stop via interval ===
-    function startAutoAds(){
-        if(autoIntervalId) return;
-        document.getElementById('auto-ad-btn').disabled = true;
-        document.getElementById('stop-auto-btn').disabled = false;
-        document.getElementById('ad-status').innerHTML = '<i class="fas fa-robot"></i> স্বয়ংক্রিয় বিজ্ঞাপন মোড চালু';
-        // Run watchAd then schedule repeating every 12s (you had 10s). tweak as needed
-        watchAd();
-        autoIntervalId = setInterval(() => {
-            if(!isAdLoading) watchAd();
-        }, 12000);
-    }
-
-    function stopAutoAds(){
-        if(autoIntervalId){
-            clearInterval(autoIntervalId);
-            autoIntervalId = null;
-        }
-        document.getElementById('auto-ad-btn').disabled = false;
-        document.getElementById('stop-auto-btn').disabled = true;
-        document.getElementById('ad-status').innerHTML = '<i class="fas fa-check-circle"></i> স্বয়ংক্রিয় বিজ্ঞাপন মোড বন্ধ';
-    }
-
-    // === Withdraw form handling ===
-    function showWithdrawForm(){
-        const total = earnedPoints + referralEarnings;
-        const withdrawSection = document.getElementById('withdraw-section');
-        withdrawSection.style.display = 'block';
-
-        const statusEl = document.getElementById('withdraw-status');
-        if(total < MIN_WITHDRAW_TAKA){
-            statusEl.textContent = `ন্যূনতম উত্তোলন পরিমাণ ${MIN_WITHDRAW_TAKA} টাকা। আপনার আছে ${total.toFixed(2)} টাকা।`;
-            statusEl.className = 'error-message';
+      setTimeout(()=>{
+        if(canWatch()){
+          statusEl.textContent = 'Starting next ad...';
+          setTimeout(()=>{
+            startBtn.disabled = false;
+            startBtn.click();
+          },900);
         } else {
-            statusEl.textContent = '';
-            statusEl.className = '';
-            document.getElementById('withdraw-amount').placeholder = `সর্বোচ্চ: ${total.toFixed(2)} টাকা`;
-            document.getElementById('withdraw-phone').value = '';
-            document.getElementById('payment-method').selectedIndex = 0;
+          statusEl.textContent = 'Daily limit reached.';
+          startBtn.disabled = true;
         }
+      },1200);
     }
 
-    async function withdrawPoints(){
-        const amount = parseFloat(document.getElementById('withdraw-amount').value);
-        const paymentMethod = document.getElementById('payment-method').value;
-        const phoneNumber = document.getElementById('withdraw-phone').value.trim();
-        const statusEl = document.getElementById('withdraw-status');
-        const total = earnedPoints + referralEarnings;
+    closeBtn.addEventListener('click', ()=>{
+      if(adPlaying){ alert('You cannot close the ad before it ends. Please watch full 18 seconds.'); }
+      else{ location.reload(); }
+    });
 
-        // Basic validation
-        if(!amount || isNaN(amount)){
-            statusEl.textContent = 'দয়া করে একটি বৈধ পরিমাণ লিখুন।';
-            statusEl.className = 'error-message';
-            return;
-        }
-        if(amount < MIN_WITHDRAW_TAKA){
-            statusEl.textContent = `ন্যূনতম উত্তোলন পরিমাণ ${MIN_WITHDRAW_TAKA} টাকা।`;
-            statusEl.className = 'error-message';
-            return;
-        }
-        if(amount > total){
-            statusEl.textContent = `পর্যাপ্ত ব্যালেন্স নেই। আপনার আছে ${total.toFixed(2)} টাকা।`;
-            statusEl.className = 'error-message';
-            return;
-        }
-        if(!paymentMethod){
-            statusEl.textContent = 'দয়া করে একটি পেমেন্ট মাধ্যম নির্বাচন করুন।';
-            statusEl.className = 'error-message';
-            return;
-        }
-        if(!/^01[3-9][0-9]{8}$/.test(phoneNumber)){
-            statusEl.textContent = 'দয়া করে একটি বৈধ বাংলাদেশী মোবাইল নম্বর লিখুন।';
-            statusEl.className = 'error-message';
-            return;
-        }
+    window.addEventListener('beforeunload', (e)=>{
+      if(adPlaying){ e.preventDefault(); e.returnValue=''; }
+    });
 
-        // Deduct from referralEarnings first then earnedPoints
-        let remaining = amount;
-        if(referralEarnings > 0){
-            const deduction = Math.min(referralEarnings, remaining);
-            referralEarnings -= deduction;
-            remaining -= deduction;
-        }
-        if(remaining > 0){
-            earnedPoints = Math.max(0, earnedPoints - remaining);
-        }
-
-        saveUserData();
-        updateUI();
-
-        // Send to server endpoint (server must forward to telegram using bot token securely)
-        const payload = {
-            userId, amount, paymentMethod, phoneNumber, watchedAdsCount, referralCount, totalEarned: (earnedPoints + referralEarnings + amount).toFixed(2)
-        };
-
-        try{
-            // replace '/api/withdraw' with your server endpoint
-            const resp = await fetch('/api/withdraw', {
-                method: 'POST',
-                headers: {'Content-Type':'application/json'},
-                body: JSON.stringify(payload)
-            });
-            if(resp.ok){
-                statusEl.textContent = 'উত্তোলন অনুরোধ সফলভাবে জমা দেওয়া হয়েছে! প্রসেসিং করতে ২৪-৪৮ ঘন্টা সময় লাগতে পারে।';
-                statusEl.className = 'success-message';
-                showNotification('আপনার উত্তোলন অনুরোধ পাঠানো হয়েছে!', 'success');
-                setTimeout(()=> document.getElementById('withdraw-section').style.display = 'none', 2500);
-            }else{
-                const text = await resp.text();
-                throw new Error(text || 'server error');
-            }
-        }catch(err){
-            console.error('Withdraw API error', err);
-            statusEl.textContent = 'সার্ভারে অনুরোধ পাঠাতে সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।';
-            statusEl.className = 'error-message';
-        }
-    }
-
-    // === Notifications ===
-    function showNotification(msg, type = 'info'){
-        const n = document.getElementById('notification');
-        const t = document.getElementById('notification-text');
-        t.textContent = msg;
-        n.className = 'notification ' + (type === 'success' ? 'success' : type === 'error' ? 'error' : 'info');
-        n.classList.add('show');
-        setTimeout(()=> n.classList.remove('show'), 3200);
-    }
-
-    </script>
+  </script>
 </body>
 </html>
